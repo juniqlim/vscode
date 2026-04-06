@@ -25,7 +25,7 @@ jobs:
         run: node -e "const p=require('./package.json'); delete p.devDependencies['gulp-atom-electron']; require('fs').writeFileSync('package.json', JSON.stringify(p, null, 2))"
 
       - name: Install dependencies
-        run: yarn --ignore-scripts --no-lockfile --ignore-engines
+        run: yarn --no-lockfile --ignore-engines
 
       - name: Compile
         run: yarn compile
