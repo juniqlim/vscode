@@ -1,0 +1,35 @@
+name: Test OpenerService
+on:
+  push:
+    branches: [pr-79538]
+
+jobs:
+  test:
+    runs-on: ubuntu-16.04
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '10.15.1'
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libxkbfile-dev pkg-config libsecret-1-dev libxss1 dbus xvfb libgtk-3-0
+
+      - name: Install yarn
+        run: npm install -g yarn@1.10.1
+
+      - name: Install dependencies
+        run: yarn --frozen-lockfile
+
+      - name: Compile
+        run: yarn compile
+
+      - name: Run unit tests
+        run: |
+          export DISPLAY=:10
+          Xvfb :10 -screen 0 1024x768x24 &
+          sleep 2
+          ./scripts/test.sh
